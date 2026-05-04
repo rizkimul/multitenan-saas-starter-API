@@ -1,16 +1,14 @@
 import uuid
 from datetime import datetime, timedelta, timezone
 
+import bcrypt
 import jwt
-from passlib.context import CryptContext
 
 from app.core.config import get_settings
 from app.core.exceptions import ConflictError, ForbiddenError, UnauthorizedError
 from app.models.user import User
 from app.repositories.user import UserRepository
 from app.schemas.user import RefreshTokenRequest, TokenResponse, UserCreate, UserLogin
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class AuthService:
@@ -77,10 +75,10 @@ class AuthService:
         return self._create_token_pair(user.id)
 
     def _hash_password(self, password: str) -> str:
-        return pwd_context.hash(password)
+        return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
     def _verify_password(self, plain: str, hashed: str) -> bool:
-        return pwd_context.verify(plain, hashed)
+        return bcrypt.checkpw(plain.encode(), hashed.encode())
 
     def _create_token_pair(self, user_id: uuid.UUID) -> TokenResponse:
         access_token = self._encode_token(
