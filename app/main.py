@@ -8,7 +8,7 @@ from app.core.config import get_settings
 from app.core.db import engine
 from app.core.exceptions import AppError
 from app.core.logging import get_logger, setup_logging
-from app.routers import auth
+from app.routers import auth, workspace
 
 logger = get_logger(__name__)
 
@@ -41,6 +41,7 @@ async def app_error_handler(request: Request, exc: AppError) -> JSONResponse:
 
 
 app.include_router(auth.router)
+app.include_router(workspace.router)
 
 
 @app.get("/health")
