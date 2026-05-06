@@ -7,6 +7,7 @@ from app.core.auth import CurrentUser
 from app.core.db import get_db
 from app.core.exceptions import NotFoundError
 from app.core.permissions import WorkspaceAdminCtx, WorkspaceMemberCtx
+from app.core.rate_limit import WorkspaceRateLimit
 from app.repositories.subscription import SubscriptionRepository
 from app.repositories.user import UserRepository
 from app.repositories.workspace import WorkspaceRepository
@@ -48,6 +49,7 @@ async def setup_billing(
     ctx: WorkspaceAdminCtx,
     current_user: CurrentUser,
     service: SubscriptionServiceDep,
+    _: WorkspaceRateLimit,
 ) -> BillingSetupResponse:
     """Create a Stripe customer for the workspace if one does not exist yet.
 
@@ -69,6 +71,7 @@ async def create_checkout(
     data: CheckoutRequest,
     ctx: WorkspaceAdminCtx,
     service: SubscriptionServiceDep,
+    _: WorkspaceRateLimit,
 ) -> CheckoutResponse:
     """Create a Stripe Checkout session and return the hosted URL.
 
@@ -89,6 +92,7 @@ async def create_checkout(
 async def get_billing(
     ctx: WorkspaceMemberCtx,
     service: SubscriptionServiceDep,
+    _: WorkspaceRateLimit,
 ) -> SubscriptionResponse:
     """Get the current subscription status for a workspace.
 

@@ -32,6 +32,10 @@ class Settings(BaseSettings):
     stripe_webhook_secret: str
     stripe_price_id: str  # default plan price ID
 
+    # Rate limiting (per workspace, fixed window)
+    rate_limit_requests: int = 60   # max requests per window
+    rate_limit_window_seconds: int = 60  # window size in seconds
+
     # App
     debug: bool = False
 

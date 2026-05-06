@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.auth import CurrentUser
 from app.core.db import get_db
 from app.core.permissions import WorkspaceAdminCtx, WorkspaceMemberCtx, WorkspaceOwnerCtx
+from app.core.rate_limit import WorkspaceRateLimit
 from app.repositories.user import UserRepository
 from app.repositories.workspace import WorkspaceRepository
 from app.schemas.workspace import (
@@ -60,7 +61,7 @@ async def list_workspaces(
 
 
 @router.get("/{slug}", response_model=WorkspaceDetailResponse)
-async def get_workspace(ctx: WorkspaceMemberCtx) -> WorkspaceDetailResponse:
+async def get_workspace(ctx: WorkspaceMemberCtx, _: WorkspaceRateLimit) -> WorkspaceDetailResponse:
     """Get workspace details including the full member list.
 
     Requires: member, admin, or owner role.
@@ -77,6 +78,7 @@ async def invite_member(
     data: MemberInvite,
     ctx: WorkspaceAdminCtx,
     service: WorkspaceServiceDep,
+    _: WorkspaceRateLimit,
 ) -> WorkspaceMemberResponse:
     """Add a user to the workspace.
 
@@ -97,6 +99,7 @@ async def update_member_role(
     data: MemberRoleUpdate,
     ctx: WorkspaceOwnerCtx,
     service: WorkspaceServiceDep,
+    _: WorkspaceRateLimit,
 ) -> WorkspaceMemberResponse:
     """Change a member's role.
 
@@ -116,6 +119,7 @@ async def remove_member(
     user_id: uuid.UUID,
     ctx: WorkspaceMemberCtx,
     service: WorkspaceServiceDep,
+    _: WorkspaceRateLimit,
 ) -> None:
     """Remove a member from the workspace.
 
