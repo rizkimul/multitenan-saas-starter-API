@@ -13,4 +13,7 @@ def test_settings() -> Settings:
         postgres_password="test",
         postgres_db="test",
         secret_key=TEST_SECRET,
+        stripe_secret_key="sk_test_dummy",
+        stripe_webhook_secret="whsec_dummy",
+        stripe_price_id="price_dummy",
     )
