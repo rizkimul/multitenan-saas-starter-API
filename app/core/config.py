@@ -27,6 +27,11 @@ class Settings(BaseSettings):
     # Redis
     redis_url: str = "redis://redis:6379/0"
 
+    # Stripe
+    stripe_secret_key: str
+    stripe_webhook_secret: str
+    stripe_price_id: str  # default plan price ID
+
     # App
     debug: bool = False
 
