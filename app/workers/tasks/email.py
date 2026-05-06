@@ -9,7 +9,9 @@ logger = get_logger(__name__)
 @celery_app.task(
     name="email.send_welcome", bind=True, max_retries=3, default_retry_delay=60
 )  # type: ignore[untyped-decorator]
-def send_welcome_email(self: Any, user_id: str, email: str, name: str) -> dict[str, Any]:
+def send_welcome_email(
+    self: Any, user_id: str, email: str, name: str
+) -> dict[str, Any]:
     """Send a welcome email to a newly registered user.
 
     Args:
