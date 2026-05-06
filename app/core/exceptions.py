@@ -54,3 +54,14 @@ class ForbiddenError(AppError):
 
     def __init__(self, message: str = "Not authorized") -> None:
         super().__init__(message, status_code=403)
+
+
+class RateLimitError(AppError):
+    """Raised when a workspace exceeds its request rate limit.
+
+    Args:
+        message: Optional override for the default message.
+    """
+
+    def __init__(self, message: str = "Rate limit exceeded") -> None:
+        super().__init__(message, status_code=429)
